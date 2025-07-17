@@ -1,13 +1,13 @@
-#include <iostream>
+#pragma once
+
 #include <string>
 #include <vector>
-#include "include/json.hpp"
-
-using str = std::string;
-using json = nlohmann::json;
+#include "json.hpp"
 
 namespace logs
 {
+    using str = std::string;
+
     struct CommitEntry
     {
         int index;

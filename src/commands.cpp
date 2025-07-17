@@ -3,10 +3,10 @@
 #include <vector>
 #include <fstream>
 #include <filesystem>
-#include "include/json.hpp"
+#include "json.hpp"
 
-#include "logs.cpp"
-#include "utils.cpp"
+#include "logs.hpp"
+#include "utils.hpp"
 
 namespace fs = std::filesystem;
 

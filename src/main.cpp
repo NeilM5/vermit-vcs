@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "commands.cpp"
+#include "commands.hpp"
 
 using str = std::string;
 
