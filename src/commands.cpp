@@ -31,6 +31,7 @@ namespace cmds
         if (fs::exists(vermitPath))
         {
             std::cout << "vermit already initialized\n";
+            return;
         }
 
         fs::create_directories(vermitPath / "commits");
