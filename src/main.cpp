@@ -59,13 +59,13 @@ void command(const std::vector<str>& args)
 
     else if (args[0] == "vermit")
     {
-        if (!utils::checkArgsSize(args, 2, "vermit <path>")) return;
+        if (!utils::checkArgsSize(args, 2, "vermit <command> [args...]")) return;
 
         str subCmd = args[1];
 
         if (subCmd == "init")
         {
-            if (!utils::checkArgsSize(args, 3, "vermit init <repoName>")) return;
+            if (!utils::checkArgsSize(args, 3, "vermit init <name>")) return;
 
             fs::path prev = fs::current_path();
             fs::current_path(currentWorkingDir);
