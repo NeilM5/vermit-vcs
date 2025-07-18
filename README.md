@@ -1,6 +1,11 @@
 # Vermit - Version Control System (VCS)
 A local version control system for small projects.
 
+## How to Run
+Run `./vermit` in ...\vermit-vcs
+
+All commands are run through a REPL-like Shell.
+
 ## Features
 ### Mini Shell
 Vermit uses a REPL-like mini Shell to run commands and set the current repository.
