@@ -4,6 +4,7 @@
 #include <sstream>
 #include <filesystem>
 
+#include "globals.hpp"
 
 #include "commands.hpp"
 #include "utils.hpp"
@@ -76,6 +77,10 @@ void command(const std::vector<str>& args)
 
             currentWorkingDir = repoPath;
             std::cout << "current directory changed to: " << currentWorkingDir << "\n";
+        }
+        else if (subCmd == "create")
+        {
+            cmds::create(args[2]);
         }
         else
         {

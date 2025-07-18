@@ -7,6 +7,8 @@
 #include <filesystem>
 #include "json.hpp"
 
+#include "globals.hpp"
+
 #include "logs.hpp"
 #include "utils.hpp"
 
@@ -54,5 +56,39 @@ namespace cmds
         }
 
         return dir;
+    }
+
+    void create(const str& filename)
+    {
+        try
+        {
+            fs::path filePath = currentWorkingDir / filename;
+
+            if (fs::exists(filePath))
+            {
+                std::cout << "file already exists: " << filePath << "\n";
+                return;
+            }
+
+            if (!filePath.parent_path().empty()) fs::create_directories(filePath.parent_path());
+
+            std::ofstream file(filePath);
+            if (!file.is_open())
+            {
+                std::cout << "failed to open: " << filePath << "\n";
+                return;
+            }
+
+            file << "";
+            file.close();
+
+            std::cout << "created file: " << filePath << "\n";
+        }
+        catch (const std::exception& e)
+        {
+            std::cerr << "error: " << e.what() << "\n";
+            return;
+        }
+
     }
 }

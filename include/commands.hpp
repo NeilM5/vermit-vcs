@@ -6,4 +6,5 @@
 namespace cmds
 {
     std::filesystem::path init(const std::string& name);
+    void create(const std::string& filename);
 }
