@@ -17,13 +17,12 @@ using json = nlohmann::json;
 
 namespace cmds
 {
-    void init(const str& path, const str& name)
+    fs::path init(const str& name)
     {
         // Create Repo Directory with name
-        fs::path basePath = path;
-        fs::path dirName = name;
+        fs::path basePath = fs::current_path();
 
-        fs::path dir = basePath / dirName;
+        fs::path dir = basePath / name;
 
         fs::create_directories(dir);
 
@@ -33,7 +32,7 @@ namespace cmds
         if (fs::exists(vermitPath))
         {
             std::cout << "vermit already initialized\n";
-            return;
+            return dir;
         }
 
         fs::create_directories(vermitPath / "commits");
@@ -53,5 +52,7 @@ namespace cmds
         {
             std::cerr << "failed to initialize vermit repo\n";
         }
+
+        return dir;
     }
 }

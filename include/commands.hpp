@@ -1,8 +1,9 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
 
 namespace cmds
 {
-    void init(const std::string& path, const std::string& name);
+    std::filesystem::path init(const std::string& name);
 }
