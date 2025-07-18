@@ -91,4 +91,28 @@ namespace cmds
         }
 
     }
+
+    void mkdir(const str& foldername)
+    {
+        try
+        {
+            fs::path folderPath = currentWorkingDir / foldername;
+
+            if (fs::exists(folderPath))
+            {
+                std::cout << "directory already exists: " << folderPath << "\n";
+                return;
+            }
+
+            fs::create_directories(folderPath);
+
+            std::cout << "created directory: " << folderPath << "\n";
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << "error: " << e.what() << '\n';
+            return;
+        }
+        
+    }
 }

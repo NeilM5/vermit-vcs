@@ -80,7 +80,13 @@ void command(const std::vector<str>& args)
         }
         else if (subCmd == "create")
         {
+            if (!utils::checkArgsSize(args, 3, "vermit create <file_name>")) return;
             cmds::create(args[2]);
+        }
+        else if (subCmd == "mkdir")
+        {
+            if (!utils::checkArgsSize(args, 3, "vermit mkdir <folder_name>")) return;
+            cmds::mkdir(args[2]);
         }
         else
         {
