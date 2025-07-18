@@ -1,10 +1,42 @@
 # Vermit - Version Control System (VCS)
 A local version control system for small projects.
 
-## Features & Commands
-- `vermit init <path> <name>`
-  - Initializes a vermit repository directory at defined path with the given name. The initialized repository includes a '.vermit' folder which contains a 'commits' folder and a log.json.
-  - Example: `vermit init C:\ exampleRepo` creates the repository folder with name 'exampleRepo' at path C:\
+## Features
+### Mini Shell
+Vermit uses a REPL-like mini Shell to run commands and set the current repository.
+
+### Commands
+- `cwd <path>`
+  - Sets the current working directory for all commands.
+    
+- `vermit init <name>`
+  - Initializes a vermit repository directory with the given name. The initialized repository includes a '.vermit' folder which contains a 'commits' folder and a log.json.
+  - Example: `vermit init exampleRepo` creates the repository folder with name 'exampleRepo' and changes the current working directory.
+ 
+- `vermit create <file_name>`
+  - Creates an empty file inside current working directory.
+  - Example: `vermit create main.py`
+    
+- `vermit mkdir <folder_name>`
+  - Creates a directory/folder inside current working directory.
+  - Example: `vermit mkdir docs`
+    
+- `vermit track <file_name>`
+  - Tracks a file inside current working directory. Saved in log.json.
+  - Example: `vermit track main.py`
+    
+- `vermit untrack <filen_name>`
+  - Untracks an already tracked file inside current working directory. Updates changes in log.json.
+  - Example: `vermit untrack main.py`
+    
+- `vermit commit <summary>`
+  - Commits changes to 'commits' folder with a unique hex ID.
+  - Example: `vermit commit initial` creates a folder inside 'commits' with changed tracked files, named with a hex ID.
+  - Note: hex IDs have a possibility of clashing, so vermit adds an index (-01, -02, etc.) after to distinguish between commits.
+    
+- `vermit revert <ID>`
+  - Reverts to a commit specified by the ID of the commit.
+  - Example: `vermit revert cmt-6595ed`
 
 More commands to be added...
 
