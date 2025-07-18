@@ -1,3 +1,5 @@
+#include "commands.hpp"
+
 #include <iostream>
 #include <string>
 #include <vector>
