@@ -11,6 +11,9 @@
 using str = std::string;
 namespace fs = std::filesystem;
 
+const str YELLOW = "\033[33m";
+const str STOP = "\033[0m";
+
 fs::path currentWorkingDir = fs::current_path();
 
 std::vector<str> tokenize(const str& input)
@@ -88,9 +91,10 @@ void command(const std::vector<str>& args)
 
 int main(int argc, char* argv[])
 {
+
     while (true)
     {
-        std::cout << "[" << currentWorkingDir << "]" << "\n" << "> ";
+        std::cout << "\n[" << YELLOW + currentWorkingDir.string() + STOP << "]" << "\n" << "> ";
 
         str line;
 
