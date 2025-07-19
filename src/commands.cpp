@@ -11,6 +11,7 @@
 
 #include "logs.hpp"
 #include "utils.hpp"
+#include "error.hpp"
 
 namespace fs = std::filesystem;
 
@@ -31,11 +32,7 @@ namespace cmds
         //Create .vermit with commits inside
         fs::path vermitPath = utils::vermitDir(dir);
 
-        if (fs::exists(vermitPath))
-        {
-            std::cout << "vermit already initialized\n";
-            return dir;
-        }
+        if (errors::pathExists(vermitPath, "vermit already exists")) return dir;
 
         fs::create_directories(vermitPath / "commits");
 
@@ -52,7 +49,7 @@ namespace cmds
         }
         else
         {
-            std::cerr << "failed to initialize vermit repo\n";
+            std::cout << RED + "failed to initialize vermit repo\n" + STOP;
         }
 
         return dir;
@@ -64,29 +61,25 @@ namespace cmds
         {
             fs::path filePath = currentWorkingDir / filename;
 
-            if (fs::exists(filePath))
-            {
-                std::cout << "file already exists: " << filePath << "\n";
-                return;
-            }
+            if (errors::pathExists(filePath, "file already exists")) return;
 
             if (!filePath.parent_path().empty()) fs::create_directories(filePath.parent_path());
 
             std::ofstream file(filePath);
             if (!file.is_open())
             {
-                std::cout << "failed to open: " << filePath << "\n";
+                std::cout << RED + "failed to open: " + STOP << RED + filePath.string() + STOP<< "\n";
                 return;
             }
 
             file << "";
             file.close();
 
-            std::cout << "created file: " << filePath << "\n";
+            std::cout << "created file: " << filePath.string() << "\n";
         }
         catch (const std::exception& e)
         {
-            std::cerr << "error: " << e.what() << "\n";
+            std::cerr << RED + "error: " + STOP << RED + e.what() + STOP<< "\n";
             return;
         }
 
@@ -98,11 +91,7 @@ namespace cmds
         {
             fs::path folderPath = currentWorkingDir / foldername;
 
-            if (fs::exists(folderPath))
-            {
-                std::cout << "directory already exists: " << folderPath << "\n";
-                return;
-            }
+            if (errors::pathExists(folderPath, "directory already exists")) return;
 
             fs::create_directories(folderPath);
 
@@ -110,7 +99,7 @@ namespace cmds
         }
         catch(const std::exception& e)
         {
-            std::cerr << "error: " << e.what() << '\n';
+            std::cerr << RED + "error: " + STOP << RED + e.what() + STOP<< "\n";
             return;
         }
         

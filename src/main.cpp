@@ -8,12 +8,10 @@
 
 #include "commands.hpp"
 #include "utils.hpp"
+#include "error.hpp"
 
 using str = std::string;
 namespace fs = std::filesystem;
-
-const str YELLOW = "\033[33m";
-const str STOP = "\033[0m";
 
 fs::path currentWorkingDir = fs::current_path();
 
@@ -43,30 +41,30 @@ void command(const std::vector<str>& args)
     // Set current working directory with 'cwd <path>' command
     else if (args[0] == "cwd")
     {
-        if (!utils::checkArgsSize(args, 2, "cwd <path>")) return;
+        if (!errors::checkArgsSize(args, 2, "cwd <path>")) return;
 
         fs::path newPath = fs::absolute(args[1]);
 
         if (fs::exists(newPath) && fs::is_directory(newPath))
         {
             currentWorkingDir = newPath;
-            std::cout << "current directory changed to: " << newPath << "\n";
+            std::cout << "current directory changed to: " << newPath.string() << "\n";
         }
         else
         {
-            std::cout << "directory not found: " << newPath << "\n";
+            errors::singleLineError("directory not found: ", newPath.string());
         }
     }
 
     else if (args[0] == "vermit")
     {
-        if (!utils::checkArgsSize(args, 2, "vermit <command> [args...]")) return;
+        if (!errors::checkArgsSize(args, 2, "vermit <command> [args...]")) return;
 
         str subCmd = args[1];
 
         if (subCmd == "init")
         {
-            if (!utils::checkArgsSize(args, 3, "vermit init <name>")) return;
+            if (!errors::checkArgsSize(args, 3, "vermit init <name>")) return;
 
             fs::path prev = fs::current_path();
             fs::current_path(currentWorkingDir);
@@ -76,27 +74,27 @@ void command(const std::vector<str>& args)
             fs::current_path(prev);
 
             currentWorkingDir = repoPath;
-            std::cout << "current directory changed to: " << currentWorkingDir << "\n";
+            std::cout << "current directory changed to: " << currentWorkingDir.string() << "\n";
         }
         else if (subCmd == "create")
         {
-            if (!utils::checkArgsSize(args, 3, "vermit create <file_name>")) return;
+            if (!errors::checkArgsSize(args, 3, "vermit create <file_name>")) return;
             cmds::create(args[2]);
         }
         else if (subCmd == "mkdir")
         {
-            if (!utils::checkArgsSize(args, 3, "vermit mkdir <folder_name>")) return;
+            if (!errors::checkArgsSize(args, 3, "vermit mkdir <folder_name>")) return;
             cmds::mkdir(args[2]);
         }
         else
         {
-            std::cout << "invalid vermit command: " << subCmd << "\n";
+            errors::singleLineError("invalid vermit command: ", subCmd);
         }
     }
 
     else
     {
-        std::cout << "invalid command: " << args[0] << "\n";
+        errors::singleLineError("invalid command: ", args[0]);
     }
 }
 

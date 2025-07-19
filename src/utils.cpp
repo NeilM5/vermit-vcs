@@ -1,4 +1,5 @@
 #include "utils.hpp"
+#include "globals.hpp"
 
 #include <filesystem>
 #include <iostream>
@@ -17,16 +18,5 @@ namespace utils
     {
         fs::path log = "log.json";
         return vermitDir(repo) / log;
-    }
-
-    bool checkArgsSize(const std::vector<std::string>& args, const int& limit, const std::string& message)
-    {
-        if (args.size() < limit)
-        {
-            std::cout << "usage: " << message << "\n";
-            return false;
-        }
-
-        return true;
     }
 }
