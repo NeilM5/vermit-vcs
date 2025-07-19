@@ -95,7 +95,7 @@ namespace cmds
 
             fs::create_directories(folderPath);
 
-            std::cout << "created directory: " << folderPath << "\n";
+            std::cout << "created directory: " << folderPath.string() << "\n";
         }
         catch(const std::exception& e)
         {

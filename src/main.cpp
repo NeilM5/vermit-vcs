@@ -3,6 +3,7 @@
 #include <vector>
 #include <sstream>
 #include <filesystem>
+#include <iomanip>
 
 #include "globals.hpp"
 
@@ -21,7 +22,7 @@ std::vector<str> tokenize(const str& input)
     std::vector<str> tokens;
     str token;
 
-    while (iss >> token)
+    while (iss >> std::quoted(token))
     {
         tokens.push_back(token);
     }
@@ -42,7 +43,7 @@ void command(const std::vector<str>& args)
     else if (args[0] == "cwd")
     {
         if (!errors::checkArgsSize(args, 2, "cwd <path>")) return;
-
+        
         fs::path newPath = fs::absolute(args[1]);
 
         if (fs::exists(newPath) && fs::is_directory(newPath))
