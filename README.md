@@ -42,6 +42,11 @@ Vermit uses a REPL-like mini Shell to run commands and set the current repositor
 - `vermit revert <ID>`
   - Reverts to a commit specified by the ID of the commit.
   - Example: `vermit revert cmt-6595ed`
+ 
+- `vermit log` or `vermit log <var>` or `vermit log all`
+  - Returns the contents of log.json (i.e., commits with data and tracked files). Can specify what field of log.json to return or return all contents (including hidden).
+  - Example: `vermit log tracking` returns tracked files; `vermit log datetime` returns datetime for all commits.
+  - log vars: `id`, `summary`, `datetime`, `files`, `tracking`
 
 More commands to be added...
 
