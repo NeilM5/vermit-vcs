@@ -6,6 +6,21 @@ Run `./vermit` in ...\vermit-vcs
 
 All commands are run through a REPL-like Shell.
 
+## Repository Structure
+```
+repo/
+├── .vermit/
+│    ├── commits/
+│    │    └── cmt-hexcode/
+│    │         └── file.ext
+│    └── log.json
+├── your_files.ext
+└── your_directory/
+     └── your_files.ext
+```
+
+Note: Do not put any files inside .vermit folder since they will not be trackable.
+
 ## Features
 ### Mini Shell
 Vermit uses a REPL-like mini Shell to run commands and set the current repository.
