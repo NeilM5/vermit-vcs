@@ -17,4 +17,7 @@ namespace cmds
 
     // Commiting
     void commit(const std::string& summary);
+
+    // Logging
+    void log(const std::string& var = "");
 }

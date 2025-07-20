@@ -97,6 +97,11 @@ void command(const std::vector<str>& args)
             if (!errors::checkArgsSize(args, 3, "vermit commit <summary>")) return;
             cmds::commit(args[2]);
         }
+        else if (subCmd == "log")
+        {
+            if (!errors::checkArgsSize(args, 2, "vermit log")) return;
+            cmds::log(args.size() > 2 ? args[2] : "");
+        }
         else
         {
             errors::singleLineError("invalid vermit command: ", subCmd);

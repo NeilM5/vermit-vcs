@@ -242,4 +242,45 @@ namespace cmds
 
         std::cout << "commited as: " << newID << " - " << summary << "\n";
     }
+
+    void log(const str& var)
+    {
+        json logData = utils::loadLog(currentWorkingDir);
+
+        if (var == "")
+        {
+            for (const auto& entry : logData["log"])
+            {
+                std::cout << "[" << entry["id"] << "] : " << entry["summary"] << " - " << entry["datetime"] << "\n";
+
+                for (const auto& file : entry["files"])
+                {
+                    std::cout << "   + " << file << "\n";
+                }
+
+                std::cout << "\n";
+            }
+        }
+        else if (var == "id")
+        {
+            for (const auto& entry : logData["log"])
+            {
+                std::cout << "- " << entry["id"] << "\n";
+            }
+        }
+        else if (var == "summary")
+        {
+            for (const auto& entry : logData["log"])
+            {
+                std::cout << "- " << entry["summary"] << "\n";
+            }
+        }
+        else if (var == "datetime")
+        {
+            for (const auto& entry : logData["log"])
+            {
+                std::cout << "- " << entry["datetime"] << "\n";
+            }
+        }
+    }
 }
