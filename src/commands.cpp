@@ -5,6 +5,7 @@
 #include <vector>
 #include <fstream>
 #include <filesystem>
+#include <sstream>
 #include "json.hpp"
 
 #include "globals.hpp"
@@ -173,5 +174,72 @@ namespace cmds
         std::cout << "tracking: " << relPath << "\n";
 
         utils::saveLog(currentWorkingDir, logData);
+    }
+
+    // Commiting
+    void commit(const std::string& summary)
+    {
+        json logData = utils::loadLog(currentWorkingDir);
+
+        if (!logData.contains("log") || !logData["log"].is_array())
+        {
+            logData["log"] = json::array();
+        }
+
+        if (!logData.contains("tracking") || !logData["tracking"].is_array())
+        {
+            logData["tracking"] = json::array();
+        }
+
+        str newID = utils::generateCommitID(logData["log"]);
+
+        auto now = std::time(nullptr);
+        std::tm* now_tm = std::localtime(&now);
+        std::stringstream timeStream;
+        timeStream << std::put_time(now_tm, "%b %d %Y %H:%M:%S");
+
+        fs::path commitDir = currentWorkingDir / ".vermit" / "commits" / newID;
+
+        fs::create_directories(commitDir);
+
+        for (const auto& entry : logData["tracking"]) {
+        str trackedFilePath = entry.get<std::string>();
+
+        fs::path src = currentWorkingDir / trackedFilePath;
+        fs::path dst = commitDir / trackedFilePath;
+
+        if (fs::exists(src)) 
+        {
+            fs::create_directories(dst.parent_path());
+
+            // Copy the file contents (overwrite if exists)
+            try 
+            {
+                fs::copy_file(src, dst, fs::copy_options::overwrite_existing);
+            } 
+            catch (const fs::filesystem_error& e) 
+            {
+                std::cerr << "Failed to copy " << src << " to " << dst << ": " << e.what() << "\n";
+            }
+
+        } 
+        else 
+        {
+            std::cerr << "Tracked file missing: " << src << "\n";
+        }
+    }
+
+        json newEntry = {
+            {"id", newID},
+            {"summary", summary},
+            {"datetime", timeStream.str()},
+            {"files", logData["tracking"]}
+        };
+
+        logData["log"].push_back(newEntry);
+
+        utils::saveLog(currentWorkingDir, logData);
+
+        std::cout << "commited as: " << newID << " - " << summary << "\n";
     }
 }

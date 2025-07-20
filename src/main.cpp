@@ -92,6 +92,11 @@ void command(const std::vector<str>& args)
             if (!errors::checkArgsSize(args, 3, "vermit track <filename>")) return;
             cmds::track(args[2]);
         }
+        else if (subCmd == "commit")
+        {
+            if (!errors::checkArgsSize(args, 3, "vermit commit <summary>")) return;
+            cmds::commit(args[2]);
+        }
         else
         {
             errors::singleLineError("invalid vermit command: ", subCmd);

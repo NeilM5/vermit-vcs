@@ -10,10 +10,12 @@ namespace logs
 
     struct CommitEntry
     {
-        int index;
+        str id;
         str summary;
+        str datetime;
+        std::vector<str> files;
         
-        NLOHMANN_DEFINE_TYPE_INTRUSIVE(CommitEntry, index, summary)
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(CommitEntry, id, summary, datetime, files)
     };
 
     struct Log

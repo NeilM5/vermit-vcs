@@ -12,6 +12,9 @@ namespace cmds
     void create(const std::string& filename);
     void mkdir(const std::string& foldername);
 
-    //Tracking
+    // Tracking
     void track(const std::string& file);
+
+    // Commiting
+    void commit(const std::string& summary);
 }
