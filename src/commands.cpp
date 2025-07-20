@@ -177,7 +177,7 @@ namespace cmds
     }
 
     // Commiting
-    void commit(const std::string& summary)
+    void commit(const str& summary)
     {
         json logData = utils::loadLog(currentWorkingDir);
 
@@ -202,32 +202,32 @@ namespace cmds
 
         fs::create_directories(commitDir);
 
-        for (const auto& entry : logData["tracking"]) {
-        str trackedFilePath = entry.get<std::string>();
-
-        fs::path src = currentWorkingDir / trackedFilePath;
-        fs::path dst = commitDir / trackedFilePath;
-
-        if (fs::exists(src)) 
+        for (const auto& entry : logData["tracking"]) 
         {
-            fs::create_directories(dst.parent_path());
+            str trackedFilePath = entry.get<std::string>();
 
-            // Copy the file contents (overwrite if exists)
-            try 
+            fs::path src = currentWorkingDir / trackedFilePath;
+            fs::path dst = commitDir / trackedFilePath;
+
+            if (fs::exists(src)) 
             {
-                fs::copy_file(src, dst, fs::copy_options::overwrite_existing);
+                fs::create_directories(dst.parent_path());
+
+                try 
+                {
+                    fs::copy_file(src, dst, fs::copy_options::overwrite_existing);
+                } 
+                catch (const fs::filesystem_error& e) 
+                {
+                    std::cerr << "Failed to copy " << src << " to " << dst << ": " << e.what() << "\n";
+                }
+
             } 
-            catch (const fs::filesystem_error& e) 
+            else 
             {
-                std::cerr << "Failed to copy " << src << " to " << dst << ": " << e.what() << "\n";
+                std::cerr << "Tracked file missing: " << src << "\n";
             }
-
-        } 
-        else 
-        {
-            std::cerr << "Tracked file missing: " << src << "\n";
         }
-    }
 
         json newEntry = {
             {"id", newID},
@@ -241,6 +241,45 @@ namespace cmds
         utils::saveLog(currentWorkingDir, logData);
 
         std::cout << "commited as: " << newID << " - " << summary << "\n";
+    }
+
+    void revert(const str& id)
+    {
+        json logData = utils::loadLog(currentWorkingDir);
+
+        auto& commits = logData["log"];
+        auto it = std::find_if(commits.begin(), commits.end(), [&](const json& entry) {return entry["id"] == id;});
+
+        if (it == commits.end())
+        {
+            std::cout << RED + "commit ID not found: " + STOP << RED + id + STOP << "\n";
+            return; 
+        }
+
+        fs::path commitPath = currentWorkingDir / ".vermit" / "commits" / id;
+
+        const auto& tracked = logData["tracking"];
+
+        for (const auto& file : tracked)
+        {
+            fs::path relative = file.get<str>();
+            fs::path src = commitPath / relative;
+            fs::path dst = currentWorkingDir / relative;
+
+            if (fs::exists(src))
+            {
+                fs::create_directories(dst.parent_path());
+                fs::copy_file(src, dst, fs::copy_options::overwrite_existing);
+                
+                // std::cout << "reverted: " << file << "\n";
+            }
+            else
+            {
+                std::cout << RED + "missing in commit: " + STOP << file << "\n";
+            }
+        }
+
+        std::cout << "reverted to commit: " << id << "\n";
     }
 
     void log(const str& var)

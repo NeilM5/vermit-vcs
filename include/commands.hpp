@@ -17,6 +17,7 @@ namespace cmds
 
     // Commiting
     void commit(const std::string& summary);
+    void revert(const std::string& id);
 
     // Logging
     void log(const std::string& var = "");
