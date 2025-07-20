@@ -107,6 +107,35 @@ namespace cmds
 
     void track(const str& file)
     {
+        json logData = utils::loadLog(currentWorkingDir);
+        auto& tracking = logData["tracking"];
+
+        if (file == "all")
+        {
+            int added = 0;
+
+            for (const auto& entry : fs::recursive_directory_iterator(currentWorkingDir))
+            {
+                if (entry.is_regular_file())
+                {
+                    fs::path relPath = fs::relative(entry.path(), currentWorkingDir);
+
+                    if (relPath.string().rfind(".vermit", 0) == 0) continue;
+
+                    if (std::find(tracking.begin(), tracking.end(), relPath.string()) != tracking.end()) continue;
+
+                    tracking.push_back(relPath.string());
+                    std::cout << "tracking: " << relPath.string() << "\n";
+                    added++;
+                }
+            }
+
+            if (added == 0) std::cout << "no new files to track\n";
+
+            utils::saveLog(currentWorkingDir, logData);
+            return;
+        }
+
         fs::path path = currentWorkingDir / file;
 
         if (!fs::exists(path))
@@ -115,10 +144,7 @@ namespace cmds
             return;
         }
 
-        json logData = utils::loadLog(currentWorkingDir);
-
         str relPath = fs::relative(path, currentWorkingDir).string();
-        auto& tracking = logData["tracking"];
 
         if (std::find(tracking.begin(), tracking.end(), relPath) != tracking.end())
         {
