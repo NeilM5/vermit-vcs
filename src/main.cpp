@@ -87,6 +87,11 @@ void command(const std::vector<str>& args)
             if (!errors::checkArgsSize(args, 3, "vermit mkdir <folder_name>")) return;
             cmds::mkdir(args[2]);
         }
+        else if (subCmd == "track")
+        {
+            if (!errors::checkArgsSize(args, 3, "vermit track <filename>")) return;
+            cmds::track(args[2]);
+        }
         else
         {
             errors::singleLineError("invalid vermit command: ", subCmd);

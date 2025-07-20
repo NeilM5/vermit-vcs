@@ -104,4 +104,31 @@ namespace cmds
         }
         
     }
+
+    void track(const str& file)
+    {
+        fs::path path = currentWorkingDir / file;
+
+        if (!fs::exists(path))
+        {
+            std::cout << "file does not exist: " << path.string() << "\n";
+            return;
+        }
+
+        json logData = utils::loadLog(currentWorkingDir);
+
+        str relPath = fs::relative(path, currentWorkingDir).string();
+        auto& tracking = logData["tracking"];
+
+        if (std::find(tracking.begin(), tracking.end(), relPath) != tracking.end())
+        {
+            std::cout << "already tracking file: " << relPath << "\n";
+            return;
+        }
+
+        tracking.push_back(relPath);
+        std::cout << "tracking: " << relPath << "\n";
+
+        utils::saveLog(currentWorkingDir, logData);
+    }
 }
