@@ -20,7 +20,7 @@ using json = nlohmann::json;
 
 namespace cmds
 {
-    fs::path init(const str& name)
+    fs::path init(const str& name, const str& readme)
     {
         // Create Repo Directory with name
         fs::path basePath = fs::current_path();
@@ -28,6 +28,23 @@ namespace cmds
         fs::path dir = basePath / name;
 
         fs::create_directories(dir);
+
+        //Create README.md
+        if (readme == "-r")
+        {
+            fs::path readmePath = dir / "README.md";
+
+            if (!fs::exists(readmePath))
+            {
+                std::ofstream readmeFile(readmePath);
+                if (readmeFile)
+                {
+                    readmeFile << "# " << name << "\n\n";
+                    readmeFile << "Initialized with Vermit - VCS";
+                    readmeFile.close();
+                }
+            }
+        }
 
         //Create .vermit with commits inside
         fs::path vermitPath = utils::vermitDir(dir);

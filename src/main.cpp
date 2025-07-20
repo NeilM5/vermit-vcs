@@ -65,12 +65,12 @@ void command(const std::vector<str>& args)
 
         if (subCmd == "init")
         {
-            if (!errors::checkArgsSize(args, 3, "vermit init <name>")) return;
+            if (!errors::checkArgsSize(args, 3, "vermit init <name> -r")) return;
 
             fs::path prev = fs::current_path();
             fs::current_path(currentWorkingDir);
 
-            fs::path repoPath = cmds::init(args[2]);
+            fs::path repoPath = cmds::init(args[2], args.size() > 3 ? args[3] : "");
 
             fs::current_path(prev);
 
